@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffd60a">
+<title>Portfolio | Video Editor</title>
+<meta name="description" content="Video editing and motion graphics portfolio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffd60a;      /* amarillo principal */
+    --bg2:#ffe14d;     /* amarillo claro */
+    --ink:#0a0a0a;    /* negro */
+    --paper:#ffffff;   /* blanco */
+    --muted:#2b2600;   /* texto secundario sobre amarillo */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1180px,100% - 40px);margin-inline:auto}
+  h1,h2,h3{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;letter-spacing:.02em;line-height:1}
+
+  /* Palabras destacadas: blanco con contorno y sombra negra */
+  .hero h1 em,.head h2 span,.about h2 span,.contact h2 em,.logo span{
+    font-style:normal;color:var(--paper);
+    -webkit-text-stroke:2px var(--ink);paint-order:stroke fill;
+    text-shadow:4px 4px 0 var(--ink);
+  }
+
+  /* NAV */
+  nav{position:fixed;inset:0 0 auto 0;z-index:50;backdrop-filter:blur(10px);background:rgba(255,214,10,.88);border-bottom:3px solid var(--ink)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{font-family:'Bebas Neue';font-size:1.7rem;letter-spacing:.06em}
+  .logo span{-webkit-text-stroke:1px var(--ink);text-shadow:2px 2px 0 var(--ink)}
+  nav ul{display:flex;gap:28px;list-style:none;font-size:.9rem;font-weight:600}
+  nav ul a:hover{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px}
+  @media(max-width:640px){nav ul{gap:16px;font-size:.8rem}}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:64px}
+  .hero::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(55% 50% at 85% 15%,rgba(255,255,255,.55),transparent 70%),
+               radial-gradient(50% 50% at 5% 95%,rgba(0,0,0,.08),transparent 70%)}
+  .hero::after{content:"";position:absolute;inset:0;opacity:.07;pointer-events:none;
+    background-image:repeating-linear-gradient(0deg,#000 0 1px,transparent 1px 4px)}
+  .hero .wrap{position:relative;z-index:1}
+  .tag{display:inline-flex;align-items:center;gap:10px;font-size:.8rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:22px}
+  .tag i{width:10px;height:10px;border-radius:50%;background:var(--ink);animation:pulse 1.6s infinite}
+  @keyframes pulse{50%{opacity:.25}}
+  .hero h1{font-size:clamp(3.6rem,11vw,9rem);margin-bottom:24px}
+  .hero h1 em{-webkit-text-stroke:3px var(--ink);text-shadow:7px 7px 0 var(--ink)}
+  .hero p{max-width:560px;color:var(--muted);font-size:1.15rem;font-weight:500;margin-bottom:34px}
+  .btns{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{padding:14px 28px;border-radius:999px;font-weight:700;font-size:.95rem;transition:.2s;border:2px solid var(--ink)}
+  .btn.primary{background:var(--ink);color:var(--paper)}
+  .btn.primary:hover{transform:translate(-3px,-3px);box-shadow:5px 5px 0 var(--paper)}
+  .btn.ghost:hover{background:var(--paper)}
+
+  /* SECTIONS */
+  section{padding:100px 0}
+  .head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:40px}
+  .head h2{font-size:clamp(2.4rem,6vw,4rem)}
+  .filters{display:flex;gap:8px;flex-wrap:wrap}
+  .filters button{background:transparent;border:2px solid var(--ink);color:var(--ink);padding:8px 18px;border-radius:999px;font:inherit;font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s}
+  .filters button:hover{background:var(--paper)}
+  .filters button.on{background:var(--ink);color:var(--paper)}
+
+  /* VIDEO GRID */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:26px}
+  @media(max-width:420px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--ink);color:var(--paper);border:2px solid var(--ink);border-radius:14px;overflow:hidden;transition:.25s}
+  .card:hover{transform:translate(-4px,-4px);box-shadow:7px 7px 0 var(--paper)}
+  .player{position:relative;aspect-ratio:16/9;background:#000 center/cover no-repeat;cursor:pointer}
+  .player.novideo{background:linear-gradient(135deg,#2a2a2a,#0a0a0a)}
+  .player::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5),transparent 55%)}
+  .play{position:absolute;z-index:2;inset:0;margin:auto;width:64px;height:64px;border-radius:50%;background:var(--bg);border:3px solid var(--ink);display:grid;place-items:center;transition:.25s}
+  .play svg{width:22px;margin-left:3px;fill:var(--ink)}
+  .player:hover .play{transform:scale(1.12)}
+  .player iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:3}
+  .info{padding:18px 20px 22px}
+  .info small{color:var(--paper);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;border-bottom:2px solid var(--paper);padding-bottom:2px}
+  .info h3{font-size:1.7rem;margin:12px 0 8px;color:var(--paper)}
+  .info p{color:#d4d4d4;font-size:.92rem}
+  .card.hide{display:none}
+
+  /* SERVICES (sección negra) */
+  .services{background:var(--ink);color:var(--paper)}
+  .services .head h2{color:var(--paper)}
+  .services .head h2 span{color:var(--bg);-webkit-text-stroke:0;text-shadow:none}
+  .svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
+  .svc div{padding:28px;border:2px solid var(--paper);border-radius:14px;background:var(--paper);color:var(--ink);transition:.25s}
+  .svc div:hover{transform:translate(-4px,-4px);box-shadow:7px 7px 0 var(--bg)}
+  .svc b{font-family:'Bebas Neue';font-size:2.6rem;color:var(--ink);display:block;line-height:1}
+  .svc h3{font-size:1.7rem;margin:10px 0 8px}
+  .svc p{color:#333;font-size:.95rem}
+
+  /* ABOUT */
+  .about{display:grid;grid-template-columns:1fr 1.3fr;gap:60px;align-items:center}
+  @media(max-width:800px){.about{grid-template-columns:1fr;gap:30px}}
+  .photo{aspect-ratio:4/5;border-radius:16px;background:var(--bg2) center/cover;border:3px solid var(--ink);box-shadow:9px 9px 0 var(--ink);display:grid;place-items:center;color:var(--ink);font-size:.85rem;text-align:center;padding:20px}
+  .about h2{font-size:clamp(2.4rem,6vw,4rem);margin-bottom:20px}
+  .about p{color:var(--muted);font-weight:500;margin-bottom:16px}
+  .tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  .tools span{border:2px solid var(--ink);border-radius:8px;padding:6px 14px;font-size:.85rem;font-weight:600;background:var(--ink);color:var(--paper)}
+
+  /* CONTACT */
+  .contact{text-align:center;background:radial-gradient(50% 80% at 50% 100%,rgba(255,255,255,.5),transparent 70%)}
+  .contact h2{font-size:clamp(3rem,9vw,7rem);margin-bottom:16px}
+  .contact h2 em{-webkit-text-stroke:3px var(--ink);text-shadow:6px 6px 0 var(--ink)}
+  .contact p{color:var(--muted);font-weight:500;margin-bottom:30px}
+  .social{display:flex;gap:14px;justify-content:center;margin-top:34px;flex-wrap:wrap;font-size:.9rem;font-weight:700}
+  .social a{border:2px solid var(--ink);border-radius:999px;padding:8px 20px;transition:.2s}
+  .social a:hover{background:var(--ink);color:var(--paper)}
+  footer{padding:26px 0;background:var(--ink);color:var(--paper);text-align:center;font-size:.82rem}
+
+  /* scroll reveal */
+  .rv{opacity:0;transform:translateY(24px);transition:.8s}
+  .rv.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="#home" class="logo" id="navLogo"></a>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="home">
+  <div class="wrap">
+    <div class="tag"><i></i><span id="heroRole"></span></div>
+    <h1 id="heroName"></h1>
+    <p id="heroTagline"></p>
+    <div class="btns">
+      <a href="#work" class="btn primary">View my work</a>
+      <a href="#contact" class="btn ghost">Let's talk</a>
+    </div>
+  </div>
+</header>
+
+<section id="work">
+  <div class="wrap">
+    <div class="head rv">
+      <h2>Featured <span>work</span></h2>
+      <div class="filters" id="filters"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="head rv"><h2>What I <span>do</span></h2></div>
+    <div class="svc rv" id="svc"></div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about">
+    <div class="photo rv" id="photo">Your photo here<br>(change the "photo" value in CONFIG)</div>
+    <div class="rv">
+      <h2>About <span>me</span></h2>
+      <div id="bio"></div>
+      <div class="tools" id="tools"></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap rv">
+    <h2>Got a <em>project?</em></h2>
+    <p id="contactText"></p>
+    <a class="btn primary" id="mailBtn" href="#">Email me</a>
+    <div class="social" id="social"></div>
+  </div>
+</section>
+
+<footer><div class="wrap" id="footer"></div></footer>
+
+<script>
+/* =====================================================
+   ✏️  EDIT ONLY THIS BLOCK WITH YOUR INFO
+   ===================================================== */
+const CONFIG = {
+  name: "Armando Gómez Tejeda",
+  role: "Video Editor & Motion Designer",
+  tagline: "I turn raw footage into stories that hook viewers. Editing, color, sound and 2D animation for creators and brands.",
+
+  email: "sandiwchcongarbanzos@gmail.com",
+  contactText: "Tell me about your idea and I'll get back to you within 24 hours.",
+
+  photo: "CONRIMIX.jpg",  // Example: "photo.jpg" (upload the image to your repository). Leave empty to show a placeholder box.
+
+  bio: [
+    "I'm a video editor with experience in YouTube content, social media, commercials and events.",
+    "I focus on pacing, storytelling and the small details that make a video feel professional."
+  ],
+
+  tools: ["Premiere Pro", "After Effects", "DaVinci Resolve", "Photoshop", "Audition"],
+
+  services: [
+    { title: "Video editing",    text: "Cuts, pacing and storytelling for YouTube, reels, ads and corporate videos." },
+    { title: "Motion graphics",  text: "Titles, lower thirds, animations and graphics that give your content its identity." },
+    { title: "Color & sound",    text: "Color correction and grading, audio cleanup and music mixing." }
+  ],
+
+  /* Your videos: paste the YouTube or Vimeo link.
+     category = what will appear in the filter buttons.
+     IMPORTANT: every line ends with a comma, except the last one. */
+  videos: [
+    { title: "Project one",    category: "Podcast",            desc: "Animated opening sequence, multi-camera footage, and color correction. Additionally, editing of video footage recorded at 50 fps in 4K.", url: "https://youtu.be/dJYME_D_E2k" },
+    { title: "Project two",    category: "Corporate",          desc: "Condensed from one hour to six minutes, featuring the best moments.", url: "https://youtu.be/oFHoBOUapJ4" },
+    { title: "Project three",  category: "Reels",              desc: "Script with a summary of the report. Green-screen recording. Audio and music production. Editing and animation.", url: "https://youtu.be/e_Ha1N5zpSU" },
+    { title: "Project four",   category: "Stop Motion",        desc: "Filmed using the iMotion mobile app. Editing and music.", url: "https://youtu.be/xwA2Gzx-ja0?si=xemqQIkw-qePCUnv" },
+    { title: "Project five",   category: "Documentary",        desc: "Scriptwriting, video and audio recording, music composition, and editing.", url: "https://youtu.be/SEMvI_U9IBU" },
+    { title: "Project six",    category: "Business Promotion", desc: "Dubbing direction. Audio recording and production. Editing and animation.", url: "https://youtu.be/nP8OMIx7gos" },
+    { title: "Project seven",  category: "Business Promotion", desc: "Audio and video recording. Editing.", url: "https://youtu.be/JJ7tVT32vVA" },
+    { title: "Project eight",  category: "Reels",              desc: "Script with book summary. Recording. Audio and music production. Editing and animation.", url: "https://youtu.be/YX-YdQek8Lg" },
+    { title: "Project nine",   category: "Social Events",      desc: "Video recording and editing.", url: "https://youtu.be/ztur0sszZs4" },
+    { title: "Project ten",    category: "Corporate",          desc: "Video recording and editing.", url: "https://youtu.be/zNQolAJu4SI" },
+    { title: "Project eleven", category: "Reels",              desc: "All the animation and music.", url: "https://youtu.be/pIVgFaLV24o" }
+  ],
+
+  social: [
+    { label: "Instagram", url: "https://www.instagram.com/enfocandoluz/" },
+    { label: "YouTube",   url: "https://www.youtube.com/@armandotejeda6469" }
+  ]
+};
+/* ===================================================== */
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+// General info
+document.title = CONFIG.name + " | " + CONFIG.role;
+$("navLogo").innerHTML = esc(CONFIG.name.split(" ")[0]) + "<span>.</span>";
+$("heroRole").textContent = CONFIG.role;
+const parts = CONFIG.name.split(" ");
+$("heroName").innerHTML = parts.length > 1
+  ? esc(parts.slice(0, -1).join(" ")) + " <em>" + esc(parts.at(-1)) + "</em>"
+  : "<em>" + esc(CONFIG.name) + "</em>";
+$("heroTagline").textContent = CONFIG.tagline;
+$("contactText").textContent = CONFIG.contactText;
+$("mailBtn").href = "mailto:" + CONFIG.email;
+$("bio").innerHTML = CONFIG.bio.map(p => "<p>" + esc(p) + "</p>").join("");
+$("tools").innerHTML = CONFIG.tools.map(t => "<span>" + esc(t) + "</span>").join("");
+$("svc").innerHTML = CONFIG.services.map((s, i) =>
+  `<div><b>0${i + 1}</b><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></div>`).join("");
+$("social").innerHTML = (CONFIG.social || []).map(s =>
+  `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join("");
+$("footer").textContent = "© " + new Date().getFullYear() + " " + CONFIG.name + ". All rights reserved.";
+if (CONFIG.photo) {
+  $("photo").style.backgroundImage = `url("${CONFIG.photo}")`;
+  $("photo").textContent = "";
+}
+
+// Detect YouTube / Vimeo
+function parseVideo(url) {
+  if (!url) return null;
+  let m = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{11})/);
+  if (m) return { type: "yt", id: m[1] };
+  m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (m) return { type: "vimeo", id: m[1] };
+  return null;
+}
+
+// Video cards
+const grid = $("grid");
+CONFIG.videos.forEach(v => {
+  const info = parseVideo(v.url);
+  const card = document.createElement("article");
+  card.className = "card rv";
+  card.dataset.cat = v.category;
+  const thumb = info && info.type === "yt"
+    ? `style="background-image:url('https://img.youtube.com/vi/${info.id}/hqdefault.jpg')"` : "";
+  card.innerHTML = `
+    <div class="player ${info && info.type === "yt" ? "" : "novideo"}" ${thumb}>
+      <div class="play"><svg viewBox="0 0 24 24"><path d="M5 3l15 9-15 9z"/></svg></div>
+    </div>
+    <div class="info"><small>${esc(v.category)}</small><h3>${esc(v.title)}</h3><p>${esc(v.desc)}</p></div>`;
+  const player = card.querySelector(".player");
+  player.addEventListener("click", () => {
+    if (!info) { if (v.url) window.open(v.url, "_blank", "noopener"); return; }
+    const src = info.type === "yt"
+      ? `https://www.youtube.com/embed/${info.id}?autoplay=1&rel=0`
+      : `https://player.vimeo.com/video/${info.id}?autoplay=1`;
+    player.innerHTML = `<iframe src="${src}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    player.style.cursor = "default";
+  }, { once: true });
+  grid.appendChild(card);
+});
+
+// Category filters
+const cats = ["All", ...new Set(CONFIG.videos.map(v => v.category))];
+const filters = $("filters");
+cats.forEach((c, i) => {
+  const b = document.createElement("button");
+  b.textContent = c;
+  if (i === 0) b.className = "on";
+  b.onclick = () => {
+    filters.querySelectorAll("button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    grid.querySelectorAll(".card").forEach(card =>
+      card.classList.toggle("hide", c !== "All" && card.dataset.cat !== c));
+  };
+  filters.appendChild(b);
+});
+
+// Scroll reveal
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+}), { threshold: .12 });
+document.querySelectorAll(".rv").forEach(el => io.observe(el));
+</script>
+</body>
+</html>
